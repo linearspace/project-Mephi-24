@@ -18,6 +18,7 @@ struct EnvironmentData {
 
 class External_factors
 {
+public:
     EnvironmentData GetEnvironmentData();
 private:
     EnvironmentData data_;

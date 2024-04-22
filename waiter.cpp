@@ -1,38 +1,77 @@
 #include "waiter.h"
 #include "car.h"
+#include "external_factors.h"
+#include "data_sender.h"
 #include <iostream>
 
 
+void Status_of_car::Set_IsAquaplaning() {
+    this->isAquaplaning_ = true;
+}
 
+void Status_of_car::Set_NoAquaplaning() {
+    this->isAquaplaning_ = false;
+}
 
-bool isAquaplaning(const CarData& carData) {
-    // Ваш алгоритм определения аквапланирования
-    // Например, можно проверять, превышает ли скорость определенный порог
-    // и есть ли вода на дороге в соответствующем количестве
-    if (carData.speed > 60 && carData.waterDepth > 2.0) {
-        return true;
-    } else {
-        return false;
+CarData Status_of_car::Get_status_of_car() {
+    return this->car_.Get_Car_data();
+}
+
+EnvironmentData Status_of_car::Get_enviroment_data() {
+    return this->environmentData_.GetEnvironmentData();
+}
+
+bool Status_of_car::isAquaplaning(const Car &car,External_factors& environmentData ) {
+    //TODO:: надо здесь сделать норм чекер аквапланирования. С помощью чат гпт добавить всяких проверок
+    CarData carData = car.Get_Car_data();
+    EnvironmentData _environmentData = environmentData.GetEnvironmentData();
+    car.Get_Car_data().sender_.sendData(carData);
+    if (carData.speed < 60.0 || carData.waterDepth <= 0.1) {
+        return false; // Если скорость низкая или глубина воды мала, то не аквапланирует
     }
+
+    // Проверяем угол поворота руля для исключения аквапланирования во время поворота
+    if (std::abs(carData.wheel_degree) > 20.0) {
+        Set_IsAquaplaning();
+        return true; // Если угол поворота руля большой, то аквапланирует
+    }
+
+    // Проверяем тип покрытия дороги
+    if (_environmentData.roadCondition == 1) {
+        Set_NoAquaplaning();
+        return false; // Если дорога сухая, то не аквапланирует
+    }
+
+//    // Проверяем состояние шин
+//    if (carData.tireCondition == "worn") {
+//        return true; // Если шины изношены, то аквапланирует
+//    }
+
+    // Проверяем вес автомобиля и его массу
+    if (carData.car_mass / carData.weight_ratio > 3) {
+        return true; // Если вес автомобиля слишком большой по сравнению с весом на оси, то аквапланирует
+    }
+
+    // Проверяем состояние системы ABS
+    if (!carData.ABS_working) {
+        Set_IsAquaplaning();
+        return true; // Если система ABS не работает, то аквапланирует
+    }
+    // Другие проверки могут быть добавлены в зависимости от конкретных условий аквапланирования
+
+
 }
 
 
-
-
-int main() {
-    // Предполагаем, что есть некоторый способ получения данных с автомобиля
-    // Здесь для целей демонстрации будем использовать заглушку
-    CarData carData;
-    carData.speed = 70; // Скорость автомобиля (км/ч)
-    carData.waterDepth = 1.5; // Глубина воды на дороге (м)
-
-    // Определяем, находится ли автомобиль в состоянии аквапланирования
-    if (isAquaplaning(carData)) {
-        std::cout << "Автомобиль находится в состоянии аквапланирования!\n";
-    } else {
-        std::cout << "Автомобиль не находится в состоянии аквапланирования.\n";
+void Status_of_car::GettingInfo() {
+    while (true) {
+        bool aquaplaning = Status_of_car::isAquaplaning(this->car_, this->environmentData_);
+        if (!aquaplaning) {
+            // Если автомобиль не находится в состоянии аквапланирования, выходим из цикла
+            break;
+        }
+        // Если автомобиль находится в состоянии аквапланирования, продолжаем проверки
     }
-
-    return 0;
 }
+
 
