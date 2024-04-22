@@ -25,3 +25,4 @@ private:
 };
 
 #endif //PROJECT_MEPHI_24_CAR_H
+ 
