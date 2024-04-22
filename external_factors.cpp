@@ -8,6 +8,10 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *dat
     return size * nmemb;
 }
 
+External_factors::External_factors(std::string serverAddress) :
+serverAddress_(serverAddress){}
+
+
 EnvironmentData External_factors::GetEnvironmentData() {
     EnvironmentData envData;
 
@@ -18,7 +22,7 @@ EnvironmentData External_factors::GetEnvironmentData() {
     curl_global_init(CURL_GLOBAL_ALL);
     curl = curl_easy_init();
     if (curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, "YOUR_API_ENDPOINT_HERE");
+        curl_easy_setopt(curl, CURLOPT_URL, serverAddress_);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
         res = curl_easy_perform(curl);

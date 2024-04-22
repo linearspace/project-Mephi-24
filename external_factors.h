@@ -19,9 +19,11 @@ struct EnvironmentData {
 class External_factors
 {
 public:
+    External_factors(std::string serverAddress);
     EnvironmentData GetEnvironmentData();
 private:
     EnvironmentData data_;
+    std::string serverAddress_;
 };
 
 
