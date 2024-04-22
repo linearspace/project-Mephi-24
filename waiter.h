@@ -1,0 +1,6 @@
+#pragma once
+
+#ifndef PROJECT_MEPHI_24_WAITER_H
+#define PROJECT_MEPHI_24_WAITER_H
+
+#endif //PROJECT_MEPHI_24_WAITER_H
