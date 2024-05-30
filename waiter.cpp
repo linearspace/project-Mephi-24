@@ -22,7 +22,6 @@ EnvironmentData Status_of_car::Get_enviroment_data() {
 }
 
 bool Status_of_car::isAquaplaning(const Car &car,External_factors& environmentData ) {
-    //TODO:: надо здесь сделать норм чекер аквапланирования. С помощью чат гпт добавить всяких проверок
     CarData carData = car.Get_Car_data();
     EnvironmentData _environmentData = environmentData.GetEnvironmentData();
     car.Get_Car_data().sender_.sendData(carData);
@@ -57,7 +56,6 @@ bool Status_of_car::isAquaplaning(const Car &car,External_factors& environmentDa
         Set_IsAquaplaning();
         return true; // Если система ABS не работает, то аквапланирует
     }
-    // Другие проверки могут быть добавлены в зависимости от конкретных условий аквапланирования
 
 
 }
@@ -67,10 +65,8 @@ void Status_of_car::GettingInfo() {
     while (true) {
         bool aquaplaning = Status_of_car::isAquaplaning(this->car_, this->environmentData_);
         if (!aquaplaning) {
-            // Если автомобиль не находится в состоянии аквапланирования, выходим из цикла
             break;
         }
-        // Если автомобиль находится в состоянии аквапланирования, продолжаем проверки
     }
 }
 

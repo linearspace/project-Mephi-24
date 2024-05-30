@@ -11,17 +11,17 @@ struct EnvironmentData {
     double longitude;           // Долгота
     std::string weather;        // Погодные условия (например, "дождь", "снег" и т.д.)
     double roadCondition;       // Состояние дороги (например, коэффициент сцепления)
-    // Другие параметры окружающей среды, которые могут быть важными для аквапланирования
-    // Например, тип покрытия дороги, температура окружающего воздуха и т.д.
 };
 
 
 class External_factors
 {
 public:
+    External_factors(std::string serverAddress);
     EnvironmentData GetEnvironmentData();
 private:
     EnvironmentData data_;
+    std::string serverAddress_;
 };
 
 
