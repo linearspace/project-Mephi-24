@@ -46,12 +46,10 @@ bool Status_of_car::isAquaplaning(const Car &car,External_factors& environmentDa
 //        return true; // Если шины изношены, то аквапланирует
 //    }
 
-    // Проверяем вес автомобиля и его массу
     if (carData.car_mass / carData.weight_ratio > 3) {
         return true; // Если вес автомобиля слишком большой по сравнению с весом на оси, то аквапланирует
     }
 
-    // Проверяем состояние системы ABS
     if (!carData.ABS_working) {
         Set_IsAquaplaning();
         return true; // Если система ABS не работает, то аквапланирует

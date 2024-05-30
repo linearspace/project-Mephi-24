@@ -21,22 +21,18 @@ void DataSender::sendData(const Car car_) {
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, car_.Get_Car_data());
         curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, car_.Get_Car_data());
 
-        // Устанавливаем колбэк для получения ответа сервера (необязательно)
         std::string response;
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
 
-        // Выполняем запрос
         res = curl_easy_perform(curl);
 
-        // Проверяем результат выполнения запроса
         if (res != CURLE_OK) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
         } else {
             printf("Response from server: %s\n", response.c_str());
         }
 
-        // Освобождаем ресурсы
         curl_easy_cleanup(curl);
     }
 }

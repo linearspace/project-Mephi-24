@@ -29,7 +29,6 @@ EnvironmentData External_factors::GetEnvironmentData() {
         if (res != CURLE_OK) {
             std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
         } else {
-            // Парсинг JSON
             Json::CharReaderBuilder builder;
             Json::CharReader *reader = builder.newCharReader();
             Json::Value root;
@@ -40,12 +39,10 @@ EnvironmentData External_factors::GetEnvironmentData() {
             if (!parsingSuccessful) {
                 std::cerr << "Failed to parse JSON: " << errors << std::endl;
             } else {
-                // Извлечение данных из JSON и заполнение структуры EnvironmentData
                 envData.latitude = root["latitude"].asDouble();
                 envData.longitude = root["longitude"].asDouble();
                 envData.weather = root["weather"].asString();
                 envData.roadCondition = root["roadCondition"].asDouble();
-                // Другие данные о погоде и окружающей среде можно добавить аналогичным образом
             }
         }
         curl_easy_cleanup(curl);
